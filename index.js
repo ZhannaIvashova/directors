@@ -46,7 +46,6 @@ const directorsArr = [
     },
 ];
 
-let count = 1;
 
 function createNewElemBorder() {
     const border = document.createElement('div');
@@ -54,12 +53,11 @@ function createNewElemBorder() {
     return border;
 }
 
-function createNewElemName(name)  {
+function createNewElemName(name, index)  {
     const directorName = document.createElement('div');
 
     directorName.classList.add('director__name');
-    directorName.textContent = `${count}. ${name}`;
-    count += 1;
+    directorName.textContent = `${index}. ${name}`;
     return directorName;
 }
 
@@ -103,18 +101,26 @@ function addToPage(fields, container) {
     fields.forEach(field => container.append(field))
 }
 
-directorsArr.forEach(function (director) {
-    const fields = []
-
-    fields.push(createNewElemBorder());
-    fields.push(createNewElemName(director.name));
-
+function createDirectorsInfo (director, index) {
+    const favDirectors = []
+    const border = createNewElemBorder();
+    const name = createNewElemName(director.name, index + 1);
     const career = createNewElemCareer(director.career);
     const link = createNewElemLink(director.films);
-    fields.push(createNewElemInfo(career, link));
+    const info = createNewElemInfo(career, link);
 
-    addToPage(fields, directorsFav);
-});
+    favDirectors.push(border, name, info);
 
-const topFilmsList = directorsArr.map((director) => director.top_rated_film);
-addToPage([createNewElemTopFilm(topFilmsList)], directorsBest);
+    addToPage(favDirectors, directorsFav)
+}
+
+function displayDirectorsInformation() {
+    directorsArr.forEach(function (director, index) {
+        createDirectorsInfo(director, index);
+    });
+
+    const topFilmsList = directorsArr.map((director) => director.top_rated_film);
+    addToPage([createNewElemTopFilm(topFilmsList)], directorsBest);
+}
+
+displayDirectorsInformation();
